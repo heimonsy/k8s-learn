@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  labels:
+    app: backend
+spec:
+  ports:
+  - port: 18080
+    targetPort: 8080
+    name: backend-api
+  selector:
+    app: backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-app-backend
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      name: app-backend
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: app-backend
+        image: heimonsy/app-backend:v0.0.4
+        ports:
+        - containerPort: 8080
